@@ -15,12 +15,12 @@ export default function Todo() {
   const route = useRoute<HomeRouteProp>();
   const [todos, settodos] = useState<Todo[]>([]);
   
-useEffect(() => {
-  const newTodo = route.params?.todo;
-  if (newTodo) {
-        settodos((prevdata)=>[...prevdata,newTodo])
-  }
-}, [route.params?.todo]);
+  useEffect(() => {
+    const newTodo = route.params?.todo;
+    if (newTodo) {
+      settodos(prevdata => [...prevdata, newTodo]);
+    }
+  }, [route.params?.todo]);
 
   const handleToggle = (id: number, val: boolean) => {
     settodos(

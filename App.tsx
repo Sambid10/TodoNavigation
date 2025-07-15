@@ -9,9 +9,9 @@ import { StyleSheet, View } from 'react-native';
 import Todo from './src/screens/Todo';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import TodoCompleted from './src/screens/AddTodo';
 import HeaderSection from './src/screens/Todo/section/HeaderSection';
 import { RootStackParamList } from './src/navigation/types';
+import AddTodo from './src/screens/AddTodo';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootStack() {
@@ -21,7 +21,7 @@ function RootStack() {
       initialRouteName="Home"
     >
       <Stack.Screen name="Home" component={Todo} />
-      <Stack.Screen name="AddTodo" component={TodoCompleted} />
+      <Stack.Screen name="AddTodo" component={AddTodo} />
     </Stack.Navigator>
   );
 }
