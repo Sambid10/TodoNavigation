@@ -14,21 +14,14 @@ type HomeRouteProp = RouteProp<RootStackParamList, 'Home'>;
 export default function Todo() {
   const route = useRoute<HomeRouteProp>();
   const [todos, settodos] = useState<Todo[]>([]);
-  // const handleTodo = (todotitle: string,tododesc:string, id: number) => {
-  //   const newtodo: Todo = {
-  //     id: id,
-  //     tododesc,
-  //     todotitle,
-  //     isCompleted: false,
-  //   };
-  //   newtodo ? settodos([...todos, newtodo]) : null;
-  // };
+  
+useEffect(() => {
+  const newTodo = route.params?.todo;
+  if (newTodo) {
+        settodos((prevdata)=>[...prevdata,newTodo])
+  }
+}, [route.params?.todo]);
 
-  useEffect(() => {
-    if (route.params?.todo) {
-      settodos(prev => [...prev, route.params.todo]);
-    }
-  }, [route.params?.todo]);
   const handleToggle = (id: number, val: boolean) => {
     settodos(
       todos.map(todo =>

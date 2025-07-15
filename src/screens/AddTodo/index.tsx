@@ -20,17 +20,14 @@ export default function AddTodo() {
     setdesc(val);
   };
 
-  const handleTodo = () => {
+  const handlePress = () => {
     const newTodo: Todo = {
       tododesc: desc,
       todotitle: title,
       isCompleted: false,
       id: Math.random(),
     };
-    navigation.navigate('Home', { todo: newTodo });
-  };
-  const handlePress = () => {
-    handleTodo();
+    navigation.popTo('Home', { todo: newTodo });
   };
 
   return (

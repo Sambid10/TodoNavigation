@@ -6,11 +6,13 @@ import { Image } from 'react-native';
 export default function TodoListFlatList({
   todos,
   handleDelete,
-}: {
+}: //   handleEdit,
+//   handleToggle
+{
   todos: Todo[];
   handleDelete: (id: number) => void;
-  handleToggle: (id: number, val: boolean) => void;
-  handleEdit: (id: number, updateddesc: string) => void;
+  //   handleToggle: (id: number, val: boolean) => void;
+  //   handleEdit: (id: number, updateddesc: string) => void;
 }) {
   return (
     <>
@@ -26,7 +28,7 @@ export default function TodoListFlatList({
             }
             ListFooterComponent={<View style={styles.seperator} />}
             renderItem={({ item }) => (
-              <>
+              <View>
                 <View style={styles.container}>
                   <View
                     style={[
@@ -34,25 +36,22 @@ export default function TodoListFlatList({
                       item.isCompleted && styles.completedeachtodo,
                     ]}
                   >
-                    <View>
-                      <Text>{item.todotitle}</Text>
-                    </View>
+                    <Text>{item.todotitle}</Text>
                   </View>
-                    {/* delete button */}             
+
+                  {/* Delete button */}
                   <TouchableOpacity
                     onPress={() => handleDelete(item.id)}
                     style={styles.deletebtn}
                   >
-                               
                     <Image
                       style={styles.btnicon}
                       source={require('../../../assets/bin.png')}
                     />
-                             
                   </TouchableOpacity>
                 </View>
                 <View style={styles.seperator} />
-              </>
+              </View>
             )}
           />
         </View>
@@ -77,8 +76,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     padding: 12,
-    paddingTop:20,
-    paddingBottom:20,
+    paddingTop: 20,
+    paddingBottom: 20,
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 12,

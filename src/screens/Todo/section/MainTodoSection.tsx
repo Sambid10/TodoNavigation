@@ -6,8 +6,8 @@ import TodoListFlatList from '../components/TodoFlatList';
 export default function MainTodoSection({
   todos,
   handleDelete,
-  handleToggle,
-  handleEdit,
+  // handleToggle,
+  // handleEdit,
 }: {
   todos: Todo[];
   handleDelete: (id: number) => void;
@@ -19,8 +19,8 @@ export default function MainTodoSection({
       <TodoListFlatList
         todos={todos}
         handleDelete={handleDelete}
-        handleToggle={handleToggle}
-        handleEdit={handleEdit}
+        // handleToggle={handleToggle}
+        // handleEdit={handleEdit}
       />
     </View>
   );
