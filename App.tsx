@@ -7,19 +7,41 @@
 
 import { StyleSheet, View } from 'react-native';
 import Todo from './src/screens/Todo';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import TodoCompleted from './src/screens/AddTodo';
+import HeaderSection from './src/screens/Todo/section/HeaderSection';
+import { RootStackParamList } from './src/navigation/types';
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+function RootStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="Home"
+    >
+      <Stack.Screen name="Home" component={Todo} />
+      <Stack.Screen name="AddTodo" component={TodoCompleted} />
+    </Stack.Navigator>
+  );
+}
 
 function App() {
   return (
-    <View style={styles.container}>
-        <Todo/>
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <RootStack />
+        <HeaderSection />
+      </View>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:"#efefef"
+    backgroundColor: '#efefef',
+    position: 'relative',
   },
 });
 

@@ -1,25 +1,34 @@
 import { StyleSheet, View } from 'react-native';
 import MainTodoSection from './section/MainTodoSection';
 import { useEffect, useState } from 'react';
-import HeaderSection from './section/HeaderSection';
-import AddTodoSection from './section/AddTodoSection';
+import AddButton from './components/AddButton';
 export type Todo = {
   id: number;
+  todotitle: string;
   tododesc: string;
   isCompleted: boolean;
 };
-
+import { useRoute, RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../navigation/types';
+type HomeRouteProp = RouteProp<RootStackParamList, 'Home'>;
 export default function Todo() {
+  const route = useRoute<HomeRouteProp>();
   const [todos, settodos] = useState<Todo[]>([]);
-  const handleTodo = (val: string, id: number) => {
-    const newtodo: Todo = {
-      id: id,
-      tododesc: val,
-      isCompleted: false,
-    };
-    newtodo ? settodos([...todos, newtodo]) : null;
-  };
+  // const handleTodo = (todotitle: string,tododesc:string, id: number) => {
+  //   const newtodo: Todo = {
+  //     id: id,
+  //     tododesc,
+  //     todotitle,
+  //     isCompleted: false,
+  //   };
+  //   newtodo ? settodos([...todos, newtodo]) : null;
+  // };
 
+  useEffect(() => {
+    if (route.params?.todo) {
+      settodos(prev => [...prev, route.params.todo]);
+    }
+  }, [route.params?.todo]);
   const handleToggle = (id: number, val: boolean) => {
     settodos(
       todos.map(todo =>
@@ -46,14 +55,14 @@ export default function Todo() {
 
   return (
     <View style={styles.maincontainer}>
-      <HeaderSection />
       <MainTodoSection
         todos={todos}
         handleDelete={handleDelete}
         handleToggle={handleToggle}
         handleEdit={handleEdit}
       />
-      <AddTodoSection handleTodo={handleTodo} />
+      <AddButton />
+      {/* <AddTodoSection handleTodo={handleTodo} /> */}
     </View>
   );
 }

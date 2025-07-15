@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet} from 'react-native';
 // import TodoList from '../TodoComponents/TodoList';
-import {Todo} from '..';
+import { Todo } from '..';
 import TodoListFlatList from '../components/TodoFlatList';
 export default function MainTodoSection({
   todos,
@@ -12,7 +12,7 @@ export default function MainTodoSection({
   todos: Todo[];
   handleDelete: (id: number) => void;
   handleToggle: (id: number, val: boolean) => void;
-  handleEdit: (id: number, updateddesc:string) => void;
+  handleEdit: (id: number, updateddesc: string) => void;
 }) {
   return (
     <View style={styles.scrollviewcontainer}>
@@ -28,11 +28,10 @@ export default function MainTodoSection({
 
 const styles = StyleSheet.create({
   scrollviewcontainer: {
-    paddingLeft:12,
-    paddingRight:12,
-    paddingTop:70,
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingTop: 70,
     marginBottom: 80,
-    position: 'relative', 
+    position: 'relative',
   },
-  
 });
