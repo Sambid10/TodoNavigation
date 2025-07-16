@@ -8,7 +8,6 @@ export default function MainTodoSection() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   scrollviewcontainer: {
     paddingLeft: 12,

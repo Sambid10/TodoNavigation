@@ -8,13 +8,6 @@ export type Todo = {
   isCompleted: boolean;
 };
 export default function Todo() {
-  // const handleToggle = (id: number, val: boolean) => {
-  //   settodos(
-  //     todos.map(todo =>
-  //       todo.id === id ? { ...todo, isCompleted: val } : todo,
-  //     ),
-  //   );
-  // };
   return (
     <View style={styles.maincontainer}>
       <MainTodoSection />

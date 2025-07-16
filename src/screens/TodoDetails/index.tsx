@@ -14,13 +14,16 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 type HomeProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 export default function TodoDetails() {
   const route = useRoute<TodoDetailsProp>();
+
   const navigation = useNavigation<HomeProp>();
-  const todo = useAppSelector(state => state.selectedtodo);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getTodobyId(route.params.todoid));
   }, [route.params?.todoid, dispatch]);
+  const todo = useAppSelector(state => state.selectedtodo);
+
   const todoid = route.params.todoid;
   const [editable, setEditable] = useState(false);
   const [editedtitle, setEditedtitle] = useState('');

@@ -36,7 +36,7 @@ export default function AddTodo() {
   return (
     <View style={styles.maincontainer}>
       <Text style={{ textAlign: 'center', fontSize: 24 }}>
-        Enter your information.
+        Add your todo
       </Text>
       <View>
         <TextInputComponent

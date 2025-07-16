@@ -53,7 +53,6 @@ export const TodoSlice = createSlice({
     },
   },
 });
-
 // Action creators are generated for each case reducer function
 export const { addTodo, handleDelete, getTodobyId, handleEdit,handleTodoComplete } =
   TodoSlice.actions;

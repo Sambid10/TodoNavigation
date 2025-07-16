@@ -10,12 +10,7 @@ import { handleDelete } from '../../../redux/TodoSlice/TodoSlice';
 import { RootStackParamList } from '../../../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-export default function TodoListFlatList({}: //   handleEdit,
-//   handleToggle
-{
-  //   handleToggle: (id: number, val: boolean) => void;
-  //   handleEdit: (id: number, updateddesc: string) => void;
-}) {
+export default function TodoListFlatList() {
   type TodoDetailsProp = NativeStackNavigationProp<
     RootStackParamList,
     'TodoDetails'
@@ -88,7 +83,9 @@ export default function TodoListFlatList({}: //   handleEdit,
                       }}
                     >
                       {item.isCompleted && (
-                        <Text style={{ color: 'green' }}>&#x2713; Completed </Text>
+                        <Text style={{ color: 'green' }}>
+                          &#x2713; Completed{' '}
+                        </Text>
                       )}
                     </View>
                   </View>
