@@ -12,6 +12,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import HeaderSection from './src/screens/Todo/section/HeaderSection';
 import { RootStackParamList } from './src/navigation/types';
 import AddTodo from './src/screens/AddTodo';
+import { store } from './src/redux/store';
+import { Provider } from 'react-redux';
+import TodoDetails from './src/screens/TodoDetails';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootStack() {
@@ -22,18 +25,22 @@ function RootStack() {
     >
       <Stack.Screen name="Home" component={Todo} />
       <Stack.Screen name="AddTodo" component={AddTodo} />
+      <Stack.Screen name='TodoDetails' component={TodoDetails}/>
     </Stack.Navigator>
   );
 }
 
 function App() {
   return (
-    <NavigationContainer>
+    <Provider store={store}>
+       <NavigationContainer>
       <View style={styles.container}>
         <RootStack />
         <HeaderSection />
       </View>
     </NavigationContainer>
+    </Provider>
+   
   );
 }
 

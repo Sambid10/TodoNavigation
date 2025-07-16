@@ -1,27 +1,10 @@
 import React from 'react';
-import { View, StyleSheet} from 'react-native';
-// import TodoList from '../TodoComponents/TodoList';
-import { Todo } from '..';
+import { View, StyleSheet } from 'react-native';
 import TodoListFlatList from '../components/TodoFlatList';
-export default function MainTodoSection({
-  todos,
-  handleDelete,
-  // handleToggle,
-  // handleEdit,
-}: {
-  todos: Todo[];
-  handleDelete: (id: number) => void;
-  handleToggle: (id: number, val: boolean) => void;
-  handleEdit: (id: number, updateddesc: string) => void;
-}) {
+export default function MainTodoSection() {
   return (
     <View style={styles.scrollviewcontainer}>
-      <TodoListFlatList
-        todos={todos}
-        handleDelete={handleDelete}
-        // handleToggle={handleToggle}
-        // handleEdit={handleEdit}
-      />
+      <TodoListFlatList />
     </View>
   );
 }

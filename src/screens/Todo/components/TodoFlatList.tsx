@@ -1,19 +1,30 @@
+/* eslint-disable react-native/no-inline-styles */
 import { Text, View, StyleSheet, FlatList } from 'react-native';
-import { Todo } from '..';
 import { KeyboardAvoidingView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
-export default function TodoListFlatList({
-  todos,
-  handleDelete,
-}: //   handleEdit,
+
+import { RootState } from '../../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hook';
+import { handleDelete } from '../../../redux/TodoSlice/TodoSlice';
+import { RootStackParamList } from '../../../navigation/types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+export default function TodoListFlatList({}: //   handleEdit,
 //   handleToggle
 {
-  todos: Todo[];
-  handleDelete: (id: number) => void;
   //   handleToggle: (id: number, val: boolean) => void;
   //   handleEdit: (id: number, updateddesc: string) => void;
 }) {
+  type TodoDetailsProp = NativeStackNavigationProp<
+    RootStackParamList,
+    'TodoDetails'
+  >;
+  const navigation = useNavigation<TodoDetailsProp>();
+
+  const todos = useAppSelector((state: RootState) => state.todos);
+  const disptach = useAppDispatch();
+
   return (
     <>
       <KeyboardAvoidingView>
@@ -29,19 +40,62 @@ export default function TodoListFlatList({
             ListFooterComponent={<View style={styles.seperator} />}
             renderItem={({ item }) => (
               <View>
-                <View style={styles.container}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('TodoDetails', { todoid: item.id })
+                  }
+                  style={styles.container}
+                >
                   <View
                     style={[
                       styles.eachtodo,
                       item.isCompleted && styles.completedeachtodo,
                     ]}
                   >
-                    <Text>{item.todotitle}</Text>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        maxWidth: '60%',
+                      }}
+                    >
+                      <Text
+                        ellipsizeMode="tail"
+                        numberOfLines={1}
+                        style={{ color: 'gray' }}
+                      >
+                        Title:{' '}
+                      </Text>
+                      <Text>{item.todotitle}</Text>
+                    </View>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        maxWidth: '60%',
+                      }}
+                    >
+                      <Text style={{ color: 'gray' }}>Description: </Text>
+                      <Text ellipsizeMode="tail" numberOfLines={1}>
+                        {item.tododesc}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        maxWidth: '60%',
+                      }}
+                    >
+                      {item.isCompleted && (
+                        <Text style={{ color: 'green' }}>&#x2713; Completed </Text>
+                      )}
+                    </View>
                   </View>
 
                   {/* Delete button */}
                   <TouchableOpacity
-                    onPress={() => handleDelete(item.id)}
+                    onPress={() => disptach(handleDelete(item.id))}
                     style={styles.deletebtn}
                   >
                     <Image
@@ -49,7 +103,7 @@ export default function TodoListFlatList({
                       source={require('../../../assets/bin.png')}
                     />
                   </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
                 <View style={styles.seperator} />
               </View>
             )}
@@ -74,24 +128,23 @@ const styles = StyleSheet.create({
 
   eachtodo: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     padding: 12,
     paddingTop: 20,
     paddingBottom: 20,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: 'white',
     borderRadius: 12,
     minHeight: 50,
     borderWidth: 1,
     borderColor: '#242424',
+    gap: 2,
   },
   completedeachtodo: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     padding: 12,
-    paddingRight: 50,
-    paddingLeft: 40,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     borderRadius: 12,
     minHeight: 50,
     borderWidth: 1,
@@ -100,6 +153,7 @@ const styles = StyleSheet.create({
   },
   container: {
     position: 'relative',
+    width: '100%',
   },
   deletebtn: {
     position: 'absolute',

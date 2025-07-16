@@ -6,13 +6,15 @@ import { Todo } from '../Todo';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { addTodo } from '../../redux/TodoSlice/TodoSlice';
 
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 export default function AddTodo() {
   const navigation = useNavigation<HomeScreenProp>();
   const [title, settile] = useState<string>('');
   const [desc, setdesc] = useState<string>('');
-
+  const dispatch=useDispatch()
   const handleTitle = (val: string) => {
     settile(val);
   };
@@ -27,7 +29,8 @@ export default function AddTodo() {
       isCompleted: false,
       id: Math.random(),
     };
-    navigation.popTo('Home', { todo: newTodo });
+    dispatch(addTodo(newTodo))
+    navigation.navigate('Home');
   };
 
   return (

@@ -1,6 +1,6 @@
-import { Todo } from "../screens/Todo";
 
 export type RootStackParamList = {
-  Home: {todo:Todo};
+  Home: undefined;
   AddTodo: undefined;
+  TodoDetails: {todoid:number}
 };
