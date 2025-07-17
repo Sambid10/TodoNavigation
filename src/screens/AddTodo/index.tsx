@@ -40,6 +40,7 @@ export default function AddTodo() {
       </Text>
       <View>
         <TextInputComponent
+          
           handleValue={handleTitle}
           formlabel={'Todo Title'}
           inputplaceholder={'Enter title'}

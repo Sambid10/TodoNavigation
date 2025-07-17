@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   scrollviewcontainer: {
     paddingLeft: 12,
     paddingRight: 12,
-    paddingTop: 70,
+    paddingTop:2,
     marginBottom: 80,
     position: 'relative',
   },

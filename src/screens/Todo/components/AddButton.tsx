@@ -20,8 +20,8 @@ export default function AddButton() {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 20,
-    right: 20,
+    bottom: 10,
+    right: 10,
   },
   btncontainer: {
     height: 60,
