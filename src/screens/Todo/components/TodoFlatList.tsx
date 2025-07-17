@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '500',
     marginBottom: 12,
-    marginTop: 12,
   },
 
   eachtodo: {

@@ -2,11 +2,16 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  BottomTabBarProps,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import Todo from '../screens/Todo';
 import Profile from '../screens/Profile';
 import History from '../screens/History';
-const icons = {
+type IconName = 'TabHome' | 'TabHistory' | 'TabProfile';
+
+const icons: Record<IconName, any> = {
   TabHome: require('../assets/home.png'),
   TabHistory: require('../assets/history.png'),
   TabProfile: require('../assets/user.png'),
@@ -14,7 +19,7 @@ const icons = {
 import { Image } from 'react-native';
 const Tab = createBottomTabNavigator();
 
-function MyTabBar({ state, descriptors, navigation }) {
+function MyTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   return (
     <View
       style={{
@@ -51,13 +56,13 @@ function MyTabBar({ state, descriptors, navigation }) {
               justifyContent: 'center',
               alignItems: 'center',
               paddingVertical: 10,
-              borderTopColor:"gray",
-              borderWidth:0,
+              borderTopColor: 'gray',
+              borderWidth: 0,
               backgroundColor: isFocused ? '#27548A' : '#F9F3EF',
             }}
           >
             <Image
-              source={icons[route.name]}
+              source={icons[route.name as IconName]}
               style={{
                 width: 24,
                 height: 24,
@@ -73,7 +78,7 @@ function MyTabBar({ state, descriptors, navigation }) {
                 color: isFocused ? '#fff' : 'black',
               }}
             >
-              {label}
+              {label as string}
             </Text>
           </TouchableOpacity>
         );
@@ -85,9 +90,21 @@ function MyTabBar({ state, descriptors, navigation }) {
 export function BottomTabs() {
   return (
     <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
-      <Tab.Screen name="TabHome" component={Todo} options={{tabBarLabel:"Home"}} />
-      <Tab.Screen name="TabHistory" component={History}  options={{tabBarLabel:"History"}}/>
-      <Tab.Screen name="TabProfile" component={Profile} options={{tabBarLabel:"Profile"}}/>
+      <Tab.Screen
+        name="TabHome"
+        component={Todo}
+        options={{ tabBarLabel: 'Home' }}
+      />
+      <Tab.Screen
+        name="TabHistory"
+        component={History}
+        options={{ tabBarLabel: 'History' }}
+      />
+      <Tab.Screen
+        name="TabProfile"
+        component={Profile}
+        options={{ tabBarLabel: 'Profile' }}
+      />
     </Tab.Navigator>
   );
 }
