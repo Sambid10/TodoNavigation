@@ -2,7 +2,6 @@ import { CompositeScreenProps } from '@react-navigation/native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Todo } from '../screens/Todo';
 export type RootStackParamList = {
   Home: undefined;
   AddTodo: undefined;
@@ -11,7 +10,7 @@ export type RootStackParamList = {
 
 export type BottomTabParamList = {
   TabHome: undefined;
-  TabHistory: { todo: Todo };
+  TabHistory: undefined;
   TabProfile: undefined;
 };
 

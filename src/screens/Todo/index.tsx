@@ -7,17 +7,9 @@ export type Todo = {
   tododesc: string;
   isCompleted: boolean;
 };
-//{navigation}:HomeTabScreenProps<"TabHome">
 export default function Todo() {
   return (
     <View style={styles.maincontainer}>
-      {/* <TouchableOpacity
-      onPress={()=>navigation.navigate("AddTodo")}
-      style={{paddingTop:12,paddingLeft:12}}>
-        <Text>
-          OLA
-        </Text>
-      </TouchableOpacity> */}
       <MainTodoSection />
       <AddButton />
     </View>

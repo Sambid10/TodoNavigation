@@ -23,6 +23,9 @@ export default function AddTodo() {
   };
 
   const handlePress = () => {
+    if(!title.trim() || !desc.trim()){
+      return
+    }else{
     const newTodo: Todo = {
       tododesc: desc,
       todotitle: title,
@@ -31,6 +34,7 @@ export default function AddTodo() {
     };
     dispatch(addTodo(newTodo))
     navigation.navigate('Home');
+  }
   };
 
   return (
