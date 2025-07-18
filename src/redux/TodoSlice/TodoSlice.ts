@@ -5,15 +5,11 @@ import { Todo } from '../../screens/Todo';
 export interface TodoState {
   todos: Todo[];
   selectedtodo: Todo | null;
-  completedtodo:Todo[]
-  incompletedtodo: Todo[]
 }
 
 const initialState: TodoState = {
   todos: [],
   selectedtodo: null,
-  completedtodo: [],
-  incompletedtodo:[]
 };
 
 export const TodoSlice = createSlice({
@@ -55,16 +51,10 @@ export const TodoSlice = createSlice({
         eachtodo.isCompleted = completed;
       }
     },
-    showCompletedTodo: (state)=>{
-     state.completedtodo=state.todos.filter(todo=>todo.isCompleted===true)
-    },
-    showIncompletedTodo: (state)=>{
-      state.incompletedtodo=state.todos.filter((todo)=>todo.isCompleted===false)
-    }
   },
 });
 // Action creators are generated for each case reducer function
-export const { addTodo, handleDelete, getTodobyId, handleEdit,handleTodoComplete,showCompletedTodo,showIncompletedTodo } =
+export const { addTodo, handleDelete, getTodobyId, handleEdit,handleTodoComplete } =
   TodoSlice.actions;
 
 export default TodoSlice.reducer;
