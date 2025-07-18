@@ -3,33 +3,34 @@ import { Text, View, StyleSheet, FlatList } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { Image } from 'react-native';
-
-import { RootState } from '../../../redux/store';
-import { useAppDispatch, useAppSelector } from '../../../hooks/hook';
+import { useAppDispatch } from '../../../hooks/hook';
 import { handleDelete } from '../../../redux/TodoSlice/TodoSlice';
 import { RootStackParamList } from '../../../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-export default function TodoListFlatList() {
+import { Todo } from '..';
+
+export default function TodoListFlatList({ data }: { data: Todo[] }) {
   type TodoDetailsProp = NativeStackNavigationProp<
     RootStackParamList,
     'TodoDetails'
   >;
   const navigation = useNavigation<TodoDetailsProp>();
-
-  const todos = useAppSelector((state: RootState) => state.todos);
   const disptach = useAppDispatch();
-
   return (
     <>
       <KeyboardAvoidingView>
         <View style={styles.todolistcontainer}>
           <FlatList
-            data={todos}
+            data={data}
             keyExtractor={item => item.id.toString()}
             ListHeaderComponent={
               <View>
-                <Text style={styles.maintitle}>Your Todos</Text>
+                {data.length === 0 ? (
+                  <Text style={styles.maintitle}>Nothing here..</Text>
+                ) : (
+                  <Text style={styles.maintitle}>Your Todos</Text>
+                )}
               </View>
             }
             ListFooterComponent={<View style={styles.seperator} />}
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   maintitle: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: '500',
     marginBottom: 12,
   },

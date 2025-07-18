@@ -1,10 +1,10 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { MyTabs } from '../../navigation/TopTabNavigation';
 
 export default function History() {
   return (
     <View style={styles.maincontainer}>
-      <Text>History</Text>
+      <MyTabs/>
     </View>
   );
 }
@@ -13,6 +13,5 @@ const styles=StyleSheet.create({
     position: 'relative',
     flex: 1,
     backgroundColor: '#FAF7F3',
-    padding: 12,
   },
 })
