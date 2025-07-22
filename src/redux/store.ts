@@ -1,17 +1,24 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web 
+
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import TodoReducer from './TodoSlice/TodoSlice'
-import persistStore from 'redux-persist/es/persistStore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 const persistConfig = {
   key: 'root',
-  storage,
+  storage:AsyncStorage,
 }
 const persistedReducer = persistReducer(persistConfig, combineReducers({
     todo:TodoReducer
 }))
 export const store = configureStore({
   reducer: persistedReducer,
+   middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 })
 export const persistor=persistStore(store)
 // Infer the `RootState` and `AppDispatch` types from the store itself
