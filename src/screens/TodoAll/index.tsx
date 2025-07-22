@@ -5,7 +5,7 @@ import { useAppSelector } from "../../hooks/hook";
 import { RootState } from "../../redux/store";
 
 export default function TodoAll() {
-    const todo=useAppSelector((state:RootState)=>state.todos)
+    const todo=useAppSelector((state:RootState)=>state.todo.todos)
   return (
     <View style={styles.container}>
         <TodoListFlatList data={todo}/>

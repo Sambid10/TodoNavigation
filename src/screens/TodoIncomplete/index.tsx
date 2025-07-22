@@ -3,7 +3,7 @@ import TodoListFlatList from '../Todo/components/TodoFlatList';
 import { RootState } from '../../redux/store';
 import { useAppSelector } from '../../hooks/hook';
 export default function TodoIncomplete() {
-  const todos = useAppSelector((state: RootState) => state.todos);
+  const todos = useAppSelector((state: RootState) => state.todo.todos);
   const incompletetodos = todos.filter(todo => todo.isCompleted === false);
   return (
     <View style={styles.container}>

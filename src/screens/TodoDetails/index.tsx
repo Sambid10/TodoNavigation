@@ -22,7 +22,7 @@ export default function TodoDetails() {
   useEffect(() => {
     dispatch(getTodobyId(route.params.todoid));
   }, [route.params?.todoid, dispatch]);
-  const todo = useAppSelector(state => state.selectedtodo);
+  const todo = useAppSelector(state => state.todo.selectedtodo);
 
   const todoid = route.params.todoid;
   const [editable, setEditable] = useState(false);

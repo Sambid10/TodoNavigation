@@ -4,12 +4,13 @@ import TextInputComponent from './Components/TextInput';
 import { useState } from 'react';
 import { Todo } from '../Todo';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigation/types';
+import { RootStackParamList} from '../../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { addTodo } from '../../redux/TodoSlice/TodoSlice';
 
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+
 export default function AddTodo() {
   const navigation = useNavigation<HomeScreenProp>();
   const [title, settile] = useState<string>('');

@@ -4,7 +4,7 @@ import { useAppSelector } from '../../hooks/hook';
 import { RootState } from '../../redux/store';
 
 export default function TodoCompleted() {
-  const todos = useAppSelector((state: RootState) => state.todos);
+  const todos = useAppSelector((state: RootState) => state.todo.todos);
   const completedTodos = todos.filter(todo => todo.isCompleted);
   return (
     <View style={styles.container}>
