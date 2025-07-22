@@ -11,6 +11,7 @@ import { TextInput } from 'react-native';
 type TodoDetailsProp = RouteProp<RootStackParamList, 'TodoDetails'>;
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { notification } from '../../redux/NotificationSlice/NotificationSlice';
 type HomeProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 export default function TodoDetails() {
   const route = useRoute<TodoDetailsProp>();
@@ -37,6 +38,9 @@ export default function TodoDetails() {
     dispatch(
       handleEdit({ id: todoid, title: editedtitle, description: editeddesc }),
     );
+    dispatch(
+      notification({message:"Edited successfully",messagetitle:"Success!!",type:"customsuccess"})
+    )
     navigation.navigate('Home');
   };
 

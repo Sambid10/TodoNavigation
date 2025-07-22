@@ -9,6 +9,7 @@ import { RootStackParamList } from '../../../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Todo } from '..';
+import { notification } from '../../../redux/NotificationSlice/NotificationSlice';
 
 export default function TodoListFlatList({ data }: { data: Todo[] }) {
   type TodoDetailsProp = NativeStackNavigationProp<
@@ -17,7 +18,12 @@ export default function TodoListFlatList({ data }: { data: Todo[] }) {
   >;
   const navigation = useNavigation<TodoDetailsProp>();
   const disptach = useAppDispatch();
+  const handleTodoDelete=(id:number)=>{
+    disptach(handleDelete(id))
+    disptach(notification({message:"Deleted Successfully",type:"customsuccess",messagetitle:"Success!!"}))
+  }
   return (
+
     <>
       <KeyboardAvoidingView>
         <View style={styles.todolistcontainer}>
@@ -93,7 +99,7 @@ export default function TodoListFlatList({ data }: { data: Todo[] }) {
 
                   {/* Delete button */}
                   <TouchableOpacity
-                    onPress={() => disptach(handleDelete(item.id))}
+                    onPress={()=>handleTodoDelete(item.id)}
                     style={styles.deletebtn}
                   >
                     <Image

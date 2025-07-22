@@ -12,24 +12,22 @@ import HeaderSection from './src/screens/Todo/section/HeaderSection';
 import { persistor, store } from './src/redux/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './src/toastconfig/toastconfig';
 
 function App() {
   return (
     <Provider store={store}>
-      <PersistGate
-      loading={null}
-      persistor={persistor}
-      >
+      <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
-      <View style={styles.container}>
-        <RootStack />
-        <HeaderSection />
-      </View>
-    </NavigationContainer>
+          <View style={styles.container}>
+            <RootStack />
+            <HeaderSection />
+            <Toast config={toastConfig}/>
+          </View>
+        </NavigationContainer>
       </PersistGate>
-       
     </Provider>
-   
   );
 }
 const styles = StyleSheet.create({

@@ -4,10 +4,11 @@ import TextInputComponent from './Components/TextInput';
 import { useState } from 'react';
 import { Todo } from '../Todo';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList} from '../../navigation/types';
+import { RootStackParamList } from '../../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { addTodo } from '../../redux/TodoSlice/TodoSlice';
+import {  notification } from '../../redux/NotificationSlice/NotificationSlice';
 
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -15,7 +16,7 @@ export default function AddTodo() {
   const navigation = useNavigation<HomeScreenProp>();
   const [title, settile] = useState<string>('');
   const [desc, setdesc] = useState<string>('');
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const handleTitle = (val: string) => {
     settile(val);
   };
@@ -24,28 +25,32 @@ export default function AddTodo() {
   };
 
   const handlePress = () => {
-    if(!title.trim() || !desc.trim()){
-      return
-    }else{
-    const newTodo: Todo = {
-      tododesc: desc,
-      todotitle: title,
-      isCompleted: false,
-      id: Math.random(),
-    };
-    dispatch(addTodo(newTodo))
-    navigation.navigate('Home');
-  }
+    if (!title.trim() || !desc.trim()) {
+      return;
+    } else {
+      const newTodo: Todo = {
+        tododesc: desc,
+        todotitle: title,
+        isCompleted: false,
+        id: Math.random(),
+      };
+      dispatch(addTodo(newTodo));
+      dispatch(
+        notification({
+          message: 'Todo Added successfully',
+          type: 'customsuccess',
+          messagetitle: 'Success!!',
+        }),
+      );
+      navigation.navigate('Home');
+    }
   };
 
   return (
     <View style={styles.maincontainer}>
-      <Text style={{ textAlign: 'center', fontSize: 24 }}>
-        Add your todo
-      </Text>
+      <Text style={{ textAlign: 'center', fontSize: 24 }}>Add your todo</Text>
       <View>
         <TextInputComponent
-          
           handleValue={handleTitle}
           formlabel={'Todo Title'}
           inputplaceholder={'Enter title'}

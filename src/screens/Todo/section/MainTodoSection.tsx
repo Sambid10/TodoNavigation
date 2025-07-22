@@ -14,7 +14,7 @@ export default function MainTodoSection() {
     }
     loadtodos()
   },[dispatch])
-  const todos = useAppSelector((state: RootState) => state.todo.todos);
+  const todos = useAppSelector((state:RootState) => state.todo.todos);
 
   return (
     <View style={styles.scrollviewcontainer}>
