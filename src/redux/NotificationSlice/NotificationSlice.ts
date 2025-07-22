@@ -17,8 +17,8 @@ export const NotificationSlice = createSlice({
       action: PayloadAction<{ message: string; type: MessageType,messagetitle:string}>
     ) => {
       const { message, type ,messagetitle} = action.payload;
-      state.message = message;
-      state.messagetitle=messagetitle
+      state.message = message; // ?
+      state.messagetitle=messagetitle // ?
       Toast.show({
         type:type,
         text2:message,
