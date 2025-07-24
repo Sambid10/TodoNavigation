@@ -30,7 +30,8 @@ export default function SignUpScreen() {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
   const [repeatpass, setrepeatpass] = useState('');
-  const [errormessage, setErrormessage] = useState('');
+  const [passerrormessage, setpassErrormessage] = useState('');
+  const [emailerrormessage, setemailerrormessage] = useState('');
   const disptach = useAppDispatch();
   const handleEmail = (val: string) => {
     setemail(val);
@@ -41,8 +42,21 @@ export default function SignUpScreen() {
   const reapeathandlePassword = (val: string) => {
     setrepeatpass(val);
   };
+
+  const isValidEmail = (emailval: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(emailval);
+  };
+
+  const isValidPass = (passwordval:string)=>{
+    const passwordRegex = /^(?=.*[A-Z]).{6,}$/
+    return passwordRegex.test(passwordval)
+  }
+
+
   const onSignupPress = () => {
-    console.log(email, password);
+    setemailerrormessage('');
+    setpassErrormessage('')
     setLoading(true);
     if (
       email.trim() === '' ||
@@ -57,11 +71,19 @@ export default function SignUpScreen() {
         }),
       );
       setLoading(false);
-    } else if (repeatpass !== password) {
-      setErrormessage('Password dont match..');
+    } else if (!isValidEmail(email)) {
+      setemailerrormessage('Invalid email format.');
       setLoading(false);
-    } else {
-      setErrormessage('');
+    } else if (repeatpass !== password) {
+      setpassErrormessage('Password dont match.');
+      setLoading(false);
+    } 
+    else if(!isValidPass(password)){
+      setpassErrormessage('Password must contain 1 capital letter and length > 6. ')
+      setLoading(false)
+    }
+    else {
+      setpassErrormessage('');
       createUserWithEmailAndPassword(getAuth(), email, password)
         .then(() => {
           console.log('user added!!');
@@ -114,26 +136,35 @@ export default function SignUpScreen() {
           handleValue={handleEmail}
           placeholder="Enter your email."
           label="Email"
+          error={emailerrormessage}
         />
+        {emailerrormessage && (
+          <Text style={{ color: '#d44118ff', fontSize: 12, marginTop: -5 }}>
+            {emailerrormessage}
+          </Text>
+        )}
         <SocialInput
           handleValue={handlePassword}
           placeholder="Enter your password."
           password={true}
           showicon={true}
           label="Password"
+          error={passerrormessage}
         />
+
         <SocialInput
           handleValue={reapeathandlePassword}
           placeholder="Re-enter your password."
           password={true}
           showicon={true}
           label="Repeat Password"
+          error={passerrormessage}
         />
-        {errormessage && (
+        {passerrormessage && (
           <Text
-            style={{ color: 'red', textTransform: 'capitalize', fontSize: 15 }}
+            style={{ color: '#d44118ff', fontSize: 12,marginTop:-5 }}
           >
-            {errormessage}
+            {passerrormessage}
           </Text>
         )}
 
@@ -143,9 +174,7 @@ export default function SignUpScreen() {
           style={styles.loginbtn}
         >
           {loading ? (
-            <ActivityIndicator
-            color={"white"}
-            />
+            <ActivityIndicator color={'white'} />
           ) : (
             <Text style={styles.btntitle}>Sign up</Text>
           )}

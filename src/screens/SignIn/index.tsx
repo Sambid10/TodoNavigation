@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   ActivityIndicator,
   StyleSheet,
@@ -21,6 +22,7 @@ export default function SignInScreen() {
   const navigation = useNavigation<SigninScreenProp>();
   const [loading, setLoading] = useState(false);
   const [email, setemail] = useState('');
+  const [emailerrormessage, setemailerrormessage] = useState('');
   const [password, setpassword] = useState('');
   const disptach = useAppDispatch();
   const handleEmail = (val: string) => {
@@ -29,9 +31,15 @@ export default function SignInScreen() {
   const handlePassword = (val: string) => {
     setpassword(val);
   };
+
+  const isValidEmail = (emailval: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(emailval);
+  };
+
   const onSignupPress = () => {
-    console.log(email, password);
-    setLoading(true)
+    setLoading(true);
+
     if (email.trim() === '' || password.trim() === '') {
       disptach(
         notification({
@@ -40,7 +48,10 @@ export default function SignInScreen() {
           messagetitle: 'Empty Credentials!!',
         }),
       );
-        setLoading(false);
+      setLoading(false);
+    } else if (!isValidEmail(email)) {
+      setemailerrormessage('Invalid email format.');
+      setLoading(false);
     } else {
       signInWithEmailAndPassword(getAuth(), email, password)
         .then(() => {
@@ -72,7 +83,7 @@ export default function SignInScreen() {
               }),
             );
           }
-          setLoading(false)
+          setLoading(false);
         })
         .finally(() => setLoading(false));
     }
@@ -87,8 +98,13 @@ export default function SignInScreen() {
           label={'Email'}
           handleValue={handleEmail}
           placeholder="Enter your email."
+          error={emailerrormessage}
         />
-
+        {emailerrormessage && (
+          <Text style={{ color: '#d44118ff', fontSize: 12, marginTop: -5 }}>
+            {emailerrormessage}
+          </Text>
+        )}
         <SocialInput
           label={'Password'}
           handleValue={handlePassword}
@@ -96,13 +112,13 @@ export default function SignInScreen() {
           password={true}
           showicon={true}
         />
-        <TouchableOpacity 
-        disabled={loading}
-        onPress={onSignupPress} style={styles.loginbtn}>
+        <TouchableOpacity
+          disabled={loading}
+          onPress={onSignupPress}
+          style={styles.loginbtn}
+        >
           {loading ? (
-            <ActivityIndicator
-            color={"white"}
-            />
+            <ActivityIndicator color={'white'} />
           ) : (
             <Text style={styles.btntitle}>Sign in</Text>
           )}

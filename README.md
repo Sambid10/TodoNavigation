@@ -23,7 +23,6 @@ yarn start
 With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
 
 ### Android
-
 ```sh
 # Using npm
 npm run android
@@ -78,18 +77,12 @@ When you want to forcefully reload, for example to reset the state of your app, 
 You've successfully run and modified your React Native App. :partying_face:
 
 ### Now what?
-
 - If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
 - If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
 # Troubleshooting
-
 If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
 # Learn More
-
 To learn more about React Native, take a look at the following resources:
-
 - [React Native Website](https://reactnative.dev) - learn more about React Native.
 - [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.

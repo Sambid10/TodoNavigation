@@ -12,25 +12,27 @@ export default function SocialInput({
   placeholder,
   password = false,
   showicon = false,
+  error,
   handleValue,
   label,
 }: {
   placeholder: string;
   password?: boolean;
   showicon?: boolean;
+  error?:string
   label: string;
   handleValue: (val: string) => void;
 }) {
   const [seePassword, setPassword] = useState(false);
   return (
     <View>
-      <Text style={{ paddingBottom: 4 }}>{label}:</Text>
+      <Text style={[ {paddingBottom: 4},error ? error?.length > 0 && {color:"#d44118ff"} : null] }>{label}:</Text>
       <View style={styles.textinputcontainer}>
         <TextInput
           autoCapitalize="none"
           secureTextEntry={password && !seePassword}
           placeholderTextColor={'gray'}
-          style={styles.input}
+          style={[styles.input,error ? error?.length > 0 && {borderColor:"#d44118ff"} : null]}
           placeholder={placeholder}
           onChangeText={text => handleValue(text)}
         />
