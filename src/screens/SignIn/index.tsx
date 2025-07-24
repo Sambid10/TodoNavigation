@@ -17,6 +17,7 @@ import { notification } from '../../redux/NotificationSlice/NotificationSlice';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigation/types';
+import { emailRegex } from '../../regex';
 type SigninScreenProp = NativeStackNavigationProp<AuthStackParamList, 'Signin'>;
 export default function SignInScreen() {
   const navigation = useNavigation<SigninScreenProp>();
@@ -33,13 +34,12 @@ export default function SignInScreen() {
   };
 
   const isValidEmail = (emailval: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(emailval);
   };
 
   const onSignupPress = () => {
     setLoading(true);
-
+    setemailerrormessage("")
     if (email.trim() === '' || password.trim() === '') {
       disptach(
         notification({

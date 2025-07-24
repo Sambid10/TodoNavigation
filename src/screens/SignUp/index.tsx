@@ -21,6 +21,7 @@ import {
 } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigation/types';
+import { emailRegex, passwordRegex } from '../../regex';
 type SignupScreenProp = NativeStackNavigationProp<AuthStackParamList, 'Signup'>;
 
 export const navigationRef = createNavigationContainerRef();
@@ -44,16 +45,12 @@ export default function SignUpScreen() {
   };
 
   const isValidEmail = (emailval: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return emailRegex.test(emailval);
   };
 
   const isValidPass = (passwordval:string)=>{
-    const passwordRegex = /^(?=.*[A-Z]).{6,}$/
     return passwordRegex.test(passwordval)
   }
-
-
   const onSignupPress = () => {
     setemailerrormessage('');
     setpassErrormessage('')
