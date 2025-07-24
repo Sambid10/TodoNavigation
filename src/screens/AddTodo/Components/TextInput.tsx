@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
+import { useEffect, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native';
 export default function TextInputComponent({
@@ -12,10 +13,14 @@ export default function TextInputComponent({
   multiline?: boolean;
   handleValue: (val: string) => void;
 }) {
+
+
+
   return (
     <View style={styles.formcontainer}>
       <Text>{formlabel}</Text>
       <TextInput
+
         onChangeText={text => handleValue(text)}
         style={[
           styles.input,

@@ -36,7 +36,6 @@ function MyTabBar({ state, descriptors, navigation}:MaterialTopTabBarProps) {
                 navigation.navigate(route.name);
               }
             };
-    
             return (
               <TouchableOpacity
                 key={route.key}

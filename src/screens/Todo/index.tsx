@@ -15,7 +15,6 @@ export default function Todo() {
     </View>
   );
 }
-
 export const styles = StyleSheet.create({
   maincontainer: {
     position: 'relative',

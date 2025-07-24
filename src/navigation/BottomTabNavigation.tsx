@@ -89,7 +89,8 @@ function MyTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
 export function BottomTabs() {
   return (
-    <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
+    <Tab.Navigator 
+    tabBar={props => <MyTabBar {...props} />}>
       <Tab.Screen
         name="TabHome"
         component={Todo}

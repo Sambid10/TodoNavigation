@@ -1,7 +1,12 @@
+/* eslint-disable react-native/no-inline-styles */
+import { getAuth, signOut } from '@react-native-firebase/auth';
 import React from 'react';
-import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
-import SearchInput from '../components/SearchInput';
+import { Image, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { useAppDispatch } from '../../../hooks/hook';
+import { notification } from '../../../redux/NotificationSlice/NotificationSlice';
+// import SearchInput from '../components/SearchInput';
 export default function HeaderSection() {
+  const dispatch = useAppDispatch();
   return (
     <View style={styles.headercontainer}>
       <View style={styles.headercontainerwrapper}>
@@ -11,9 +16,42 @@ export default function HeaderSection() {
             source={require('../../../assets/hamburger.png')}
           />
         </TouchableOpacity>
-        <SearchInput />
-
-        <Image style={styles.img} source={require('../../../assets/user1.jpg')} />
+        {/* <SearchInput /> */}
+        <View
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            flexDirection: 'row',
+          }}
+        >
+          <Image
+            style={styles.img}
+            source={require('../../../assets/user1.jpg')}
+          />
+          <TouchableOpacity
+            onPress={() =>
+              signOut(getAuth()).then(() => {
+                dispatch(
+                  notification({
+                    message: 'Signed out..',
+                    messagetitle: 'Success!!',
+                    type: 'customsuccess',
+                  }),
+                );
+              })
+            }
+            style={{
+              backgroundColor: '#27548A',
+              borderRadius: 12,
+              padding: 10,
+            }}
+          >
+            <View>
+              <Text style={{ color: 'white' }}>Sign out</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

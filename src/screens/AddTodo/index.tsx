@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text,TouchableOpacity, View } from 'react-native';
 import TextInputComponent from './Components/TextInput';
-import { useState } from 'react';
+import {useState } from 'react';
 import { Todo } from '../Todo';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
@@ -16,6 +16,7 @@ export default function AddTodo() {
   const navigation = useNavigation<HomeScreenProp>();
   const [title, settile] = useState<string>('');
   const [desc, setdesc] = useState<string>('');
+
   const dispatch = useDispatch();
   const handleTitle = (val: string) => {
     settile(val);

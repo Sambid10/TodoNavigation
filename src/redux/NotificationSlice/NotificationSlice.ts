@@ -6,7 +6,7 @@ const initialState = {
   messagetitle: ""
 };
 
-export type MessageType = 'success' | "error" | "customsuccess";
+export type MessageType = 'success' | "error" | "customsuccess" | "customerror";
 
 export const NotificationSlice = createSlice({
   name: "notification",

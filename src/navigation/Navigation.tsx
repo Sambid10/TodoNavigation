@@ -1,13 +1,15 @@
+/* eslint-disable react/no-unstable-nested-components */
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TodoDetails from '../screens/TodoDetails';
 import AddTodo from '../screens/AddTodo';
 import { RootStackParamList } from './types';
 import { BottomTabs } from './BottomTabNavigation';
+import HeaderSection from '../screens/Todo/section/HeaderSection';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function RootStack() {
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{header:()=><HeaderSection/>}}
       initialRouteName="Home"
     >
       <Stack.Screen name="Home" component={BottomTabs} />
