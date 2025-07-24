@@ -21,11 +21,14 @@ import { emailRegex } from '../../regex';
 type SigninScreenProp = NativeStackNavigationProp<AuthStackParamList, 'Signin'>;
 export default function SignInScreen() {
   const navigation = useNavigation<SigninScreenProp>();
+  
   const [loading, setLoading] = useState(false);
   const [email, setemail] = useState('');
   const [emailerrormessage, setemailerrormessage] = useState('');
   const [password, setpassword] = useState('');
   const disptach = useAppDispatch();
+
+
   const handleEmail = (val: string) => {
     setemail(val);
   };

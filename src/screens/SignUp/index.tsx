@@ -27,12 +27,21 @@ type SignupScreenProp = NativeStackNavigationProp<AuthStackParamList, 'Signup'>;
 export const navigationRef = createNavigationContainerRef();
 export default function SignUpScreen() {
   const navigation = useNavigation<SignupScreenProp>();
+  
+  //loading state
   const [loading, setLoading] = useState(false);
+
+  //email
   const [email, setemail] = useState('');
+
+  //password
   const [password, setpassword] = useState('');
   const [repeatpass, setrepeatpass] = useState('');
+
+  //error ko lagi
   const [passerrormessage, setpassErrormessage] = useState('');
   const [emailerrormessage, setemailerrormessage] = useState('');
+
   const disptach = useAppDispatch();
   const handleEmail = (val: string) => {
     setemail(val);
@@ -48,12 +57,12 @@ export default function SignUpScreen() {
     return emailRegex.test(emailval);
   };
 
-  const isValidPass = (passwordval:string)=>{
-    return passwordRegex.test(passwordval)
-  }
+  const isValidPass = (passwordval: string) => {
+    return passwordRegex.test(passwordval);
+  };
   const onSignupPress = () => {
     setemailerrormessage('');
-    setpassErrormessage('')
+    setpassErrormessage('');
     setLoading(true);
     if (
       email.trim() === '' ||
@@ -74,12 +83,12 @@ export default function SignUpScreen() {
     } else if (repeatpass !== password) {
       setpassErrormessage('Password dont match.');
       setLoading(false);
-    } 
-    else if(!isValidPass(password)){
-      setpassErrormessage('Password must contain 1 capital letter and length > 6. ')
-      setLoading(false)
-    }
-    else {
+    } else if (!isValidPass(password)) {
+      setpassErrormessage(
+        'Password must contain 1 capital letter & length > 6. ',
+      );
+      setLoading(false);
+    } else {
       setpassErrormessage('');
       createUserWithEmailAndPassword(getAuth(), email, password)
         .then(() => {
@@ -158,9 +167,7 @@ export default function SignUpScreen() {
           error={passerrormessage}
         />
         {passerrormessage && (
-          <Text
-            style={{ color: '#d44118ff', fontSize: 12,marginTop:-5 }}
-          >
+          <Text style={{ color: '#d44118ff', fontSize: 12, marginTop: -5 }}>
             {passerrormessage}
           </Text>
         )}

@@ -1,12 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
-import { getAuth, signOut } from '@react-native-firebase/auth';
+import { getAuth } from '@react-native-firebase/auth';
 import React from 'react';
 import { Image, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { useAppDispatch } from '../../../hooks/hook';
-import { notification } from '../../../redux/NotificationSlice/NotificationSlice';
+// import { useAppDispatch } from '../../../hooks/hook';
+// import { notification } from '../../../redux/NotificationSlice/NotificationSlice';
 // import SearchInput from '../components/SearchInput';
 export default function HeaderSection() {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
+  const auth = getAuth();
+  const user = auth.currentUser;
   return (
     <View style={styles.headercontainer}>
       <View style={styles.headercontainerwrapper}>
@@ -25,11 +27,18 @@ export default function HeaderSection() {
             flexDirection: 'row',
           }}
         >
-          <Image
-            style={styles.img}
-            source={require('../../../assets/user1.jpg')}
-          />
-          <TouchableOpacity
+          <View style={styles.img}>
+            <Text
+              style={{
+                color: 'white',
+                textTransform: 'uppercase',
+                fontSize: 20,
+              }}
+            >
+              {user?.email?.slice(0, 1)}
+            </Text>
+          </View>
+          {/* <TouchableOpacity
             onPress={() =>
               signOut(getAuth()).then(() => {
                 dispatch(
@@ -50,7 +59,7 @@ export default function HeaderSection() {
             <View>
               <Text style={{ color: 'white' }}>Sign out</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>
@@ -88,7 +97,9 @@ const styles = StyleSheet.create({
     height: 42,
     width: 42,
     borderRadius: 99,
-    borderWidth: 2,
-    borderColor: '#F0E4D3',
+    backgroundColor: 'brown',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
