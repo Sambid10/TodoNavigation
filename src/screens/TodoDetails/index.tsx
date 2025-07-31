@@ -53,12 +53,13 @@ const OnSave = async () => {
       return;
     }
     const docId = snapshot.docs[0].id;
+    const docIdToNumber=Number(docId) 
     await collection.doc(docId).update({
       todotitle: editedtitle,
       tododesc: editeddesc,
       datetime: firestore.Timestamp.fromDate(editedtimestamp),
     });
-    await scheduleNotification(editedtitle, editedtimestamp);
+    await scheduleNotification(editedtitle, editedtimestamp,docIdToNumber,route.params.todo);
     dispatch(
       notification({
         message: 'Todo edited and rescheduled!',
@@ -106,7 +107,6 @@ const OnSave = async () => {
     setEditeddesc(route.params.todo.tododesc);
     seteditedtimestamp(route.params.todo.datetime.toDate())
   };
-  const storedDate=route.params.todo.datetime.toDate()
   return (
     <View style={styles.maincontainer}>
       <Text style={{ textAlign: 'center', fontSize: 24 }}>Todo Details.</Text>
@@ -147,7 +147,7 @@ const OnSave = async () => {
         <View style={styles.eachformfield}>
           <DatePickerComponent
             disabled={!editable}
-            date={editable ? editedtimestamp : storedDate}
+            date={editable ? editedtimestamp : route.params.todo.datetime!.toDate()}
             label={'Todo Deadline date'}
             setDate={seteditedtimestamp}
           />

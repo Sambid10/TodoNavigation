@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   scrollviewcontainer: {
     padding:12,
     position: 'relative',
+    marginBottom:80
   },
    maintitle: {
     fontSize: 24,

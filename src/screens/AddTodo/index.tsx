@@ -51,7 +51,7 @@ export default function AddTodo() {
 
     try {
       await firestore().collection('todos').add(newTodo);
-      await scheduleNotification(title, date);
+      await scheduleNotification(title, date,newTodo.id,newTodo);
       dispatch(
         notification({
           message: 'Todo Added successfully',

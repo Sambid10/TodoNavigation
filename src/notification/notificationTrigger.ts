@@ -1,13 +1,18 @@
 import notifee, { TimestampTrigger, TriggerType } from '@notifee/react-native';
-
-export async function scheduleNotification(title: string, datetime: Date) {
-  const oneMinuteBefore = new Date(datetime.getTime() - 1 * 60 * 1000); 
+// import { Todo } from '../screens/Todo';
+import { Todo } from '../screens/Todo';
+export async function scheduleNotification(
+  title: string,
+  datetime: Date,
+  todoId: number,
+  todo: Todo,
+) {
+  const oneMinuteBefore = new Date(datetime.getTime() - 1 * 60 * 1000);
   const trigger: TimestampTrigger = {
     type: TriggerType.TIMESTAMP,
     timestamp: oneMinuteBefore.getTime(),
-    alarmManager: true, 
+    alarmManager: true,
   };
-
   await notifee.createTriggerNotification(
     {
       title: '⏰ Todo Reminder',
@@ -18,7 +23,14 @@ export async function scheduleNotification(title: string, datetime: Date) {
           id: 'default',
         },
       },
+      data: {
+        todoId,
+        todo: JSON.stringify({
+          ...todo,
+          datetime: todo.datetime.toDate().toISOString(), // Convert Timestamp to string
+        }),
+      },
     },
-    trigger
+    trigger,
   );
 }
