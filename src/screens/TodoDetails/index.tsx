@@ -54,12 +54,13 @@ const OnSave = async () => {
     }
     const docId = snapshot.docs[0].id;
     const docIdToNumber=Number(docId) 
+    console.log(docIdToNumber)
     await collection.doc(docId).update({
       todotitle: editedtitle,
       tododesc: editeddesc,
       datetime: firestore.Timestamp.fromDate(editedtimestamp),
     });
-    await scheduleNotification(editedtitle, editedtimestamp,docIdToNumber,route.params.todo);
+    await scheduleNotification(editedtitle, editedtimestamp,route.params.todoid,route.params.todo);
     dispatch(
       notification({
         message: 'Todo edited and rescheduled!',

@@ -15,7 +15,7 @@ export async function scheduleNotification(
   };
   await notifee.createTriggerNotification(
     {
-      title: '⏰ Todo Reminder',
+      title: '⏰ Todo Reminder!!',
       body: `"${title}" is due in 1 minute.`,
       android: {
         channelId: 'default',
@@ -27,7 +27,7 @@ export async function scheduleNotification(
         todoId,
         todo: JSON.stringify({
           ...todo,
-          datetime: todo.datetime.toDate().toISOString(), // Convert Timestamp to string
+          datetime: todo.datetime.toDate().toISOString(),
         }),
       },
     },
