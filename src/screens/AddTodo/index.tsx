@@ -14,15 +14,15 @@ import { ActivityIndicator } from 'react-native';
 import { getAuth } from '@react-native-firebase/auth';
 import DatePickerComponent from './Components/DatePicker';
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
-
+import { scheduleNotification } from '../../notification/notificationTrigger';
 export default function AddTodo() {
   const navigation = useNavigation<HomeScreenProp>();
   const [title, settile] = useState<string>('');
   const [desc, setdesc] = useState<string>('');
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(new Date());
   const [loading, setloading] = useState(false);
   const auth = getAuth();
-  const userid= auth.currentUser!.uid 
+  const userid = auth.currentUser!.uid;
   const dispatch = useDispatch();
   const handleTitle = (val: string) => {
     settile(val);
@@ -30,40 +30,40 @@ export default function AddTodo() {
   const handleDesc = (val: string) => {
     setdesc(val);
   };
-  const handleDate =(val:Date)=>{
-    setDate(val)
-  }
-  const handlePress = () => {
+  const handleDate = (val: Date) => {
+    setDate(val);
+  };
+  const handlePress = async () => {
     setloading(true);
-    if (!title.trim() && !desc.trim() ) {
-      setloading(false)
+    if (!title.trim() && !desc.trim()) {
+      setloading(false);
       return;
-    } else {
-      const newTodo: Todo = {
-        tododesc: desc,
-        todotitle: title,
-        isCompleted: false,
-        id: Math.random(),
-        userid:userid,
-        datetime:firestore.Timestamp.fromDate(date)
-      };
-      firestore()
-        .collection('todos')
-        .add(newTodo)
-        .then(() => {
-          console.log('from db');
-          // dispatch(addTodo(newTodo));
-          dispatch(
-            notification({
-              message: 'Todo Added successfully',
-              type: 'customsuccess',
-              messagetitle: 'Success!!',
-            }),
-          );
-          navigation.navigate('Home',{screen:"TabHome"});
-        })
-        .catch(err => console.log(err))
-        .finally(() => setloading(false));
+    }
+
+    const newTodo: Todo = {
+      tododesc: desc,
+      todotitle: title,
+      isCompleted: false,
+      id: Math.random(),
+      userid: userid,
+      datetime: firestore.Timestamp.fromDate(date),
+    };
+
+    try {
+      await firestore().collection('todos').add(newTodo);
+      await scheduleNotification(title, date);
+      dispatch(
+        notification({
+          message: 'Todo Added successfully',
+          type: 'customsuccess',
+          messagetitle: 'Success!!',
+        }),
+      );
+      navigation.navigate('Home', { screen: 'TabHome' });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setloading(false);
     }
   };
 
@@ -86,8 +86,13 @@ export default function AddTodo() {
           multiline={true}
         />
       </View>
-      
-      <DatePickerComponent disabled={false} label={"Pick your deadline date"} date={date} setDate={handleDate}/>
+
+      <DatePickerComponent
+        disabled={false}
+        label={'Pick your deadline date'}
+        date={date}
+        setDate={handleDate}
+      />
 
       <View style={styles.btncontainer}>
         <TouchableOpacity
