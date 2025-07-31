@@ -18,7 +18,7 @@ import { toastConfig } from './src/toastconfig/toastconfig';
 import { useState } from 'react';
 // import { PermissionsAndroid } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import notifee, { AndroidImportance} from '@notifee/react-native';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 import {
   getAuth,
   onAuthStateChanged,
@@ -38,8 +38,8 @@ function App() {
       });
     }
     createNotificationChannel();
-   
-    const unsubscribeMessage = messaging().onMessage(async remoteMessage => {
+
+    const subscribeMessage = messaging().onMessage(async remoteMessage => {
       console.log('asssssssssssssssssssssssssss', remoteMessage);
       await notifee.displayNotification({
         title: remoteMessage.notification?.title ?? 'No title',
@@ -50,7 +50,7 @@ function App() {
       });
     });
     return () => {
-      unsubscribeMessage();
+      subscribeMessage();
     };
   }, []);
 

@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useAppDispatch } from '../../hooks/hook';
 import { TextInput } from 'react-native';
 import { ActivityIndicator } from 'react-native';
+import DatePickerComponent from '../AddTodo/Components/DatePicker';
 // import {
 //   getTodobyId,
 //   handleEdit,
@@ -32,10 +33,11 @@ export default function TodoDetails() {
   const [editable, setEditable] = useState(false);
   const [editedtitle, setEditedtitle] = useState('');
   const [editeddesc, setEditeddesc] = useState('');
-  const [loading,setloading]=useState(false)
+  const [editedtimestamp,seteditedtimestamp]=useState(new Date())
+  const [loading, setloading] = useState(false);
 
   const OnSave = async () => {
-    setloading(true)
+    setloading(true);
     const collection = firestore().collection('todos');
     const snapshot = await collection.where('id', '==', todoid).get();
     if (!snapshot.empty) {
@@ -45,6 +47,7 @@ export default function TodoDetails() {
         .update({
           todotitle: editedtitle,
           tododesc: editeddesc,
+          datetime: firestore.Timestamp.fromDate(editedtimestamp)
         })
         .then(() => {
           // dispatch(
@@ -61,9 +64,10 @@ export default function TodoDetails() {
               type: 'customsuccess',
             }),
           );
-          navigation.navigate('Home',{screen:"TabHome"});
+          navigation.navigate('Home', { screen: 'TabHome' });
         })
-        .catch(err => console.log(err)).finally(()=>setloading(false));
+        .catch(err => console.log(err))
+        .finally(() => setloading(false));
     } else {
       console.warn('notfound');
     }
@@ -88,17 +92,18 @@ export default function TodoDetails() {
             type: 'customsuccess',
           }),
         );
-        navigation.navigate('Home',{screen:"TabHome"});
+        navigation.navigate('Home', { screen: 'TabHome' });
       })
       .catch(err => console.log(err));
   };
 
-
-  const OnEdit=()=>{
-    setEditable(true)
-    setEditedtitle(route.params.todo.todotitle)
-    setEditeddesc(route.params.todo.tododesc)
-  }
+  const OnEdit = () => {
+    setEditable(true);
+    setEditedtitle(route.params.todo.todotitle);
+    setEditeddesc(route.params.todo.tododesc);
+    seteditedtimestamp(route.params.todo.datetime.toDate())
+  };
+  const storedDate=route.params.todo.datetime.toDate()
   return (
     <View style={styles.maincontainer}>
       <Text style={{ textAlign: 'center', fontSize: 24 }}>Todo Details.</Text>
@@ -136,6 +141,14 @@ export default function TodoDetails() {
             placeholderTextColor={'#9CA3AF'}
           />
         </View>
+        <View style={styles.eachformfield}>
+          <DatePickerComponent
+            disabled={!editable}
+            date={editable ? editedtimestamp : storedDate}
+            label={'Todo Deadline date'}
+            setDate={seteditedtimestamp}
+          />
+        </View>
       </View>
       <View style={styles.btncontainer}>
         <BouncyCheckbox
@@ -156,8 +169,11 @@ export default function TodoDetails() {
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={OnSave} style={styles.btn}>
-            {loading ?    <ActivityIndicator color={'white'} /> :  <Text style={{ color: 'white', fontSize: 16 }}>Save</Text>}
-           
+            {loading ? (
+              <ActivityIndicator color={'white'} />
+            ) : (
+              <Text style={{ color: 'white', fontSize: 16 }}>Save</Text>
+            )}
           </TouchableOpacity>
         )}
       </View>
@@ -195,7 +211,6 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   btncontainer: {
-    marginTop: 75,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -1,12 +1,15 @@
 import { StyleSheet, View } from 'react-native';
 import MainTodoSection from './section/MainTodoSection';
 import AddButton from './components/AddButton';
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+
 export type Todo = {
   id: number;
   todotitle: string;
   tododesc: string;
   isCompleted: boolean;
-  userid:string
+  userid: string;
+  datetime: FirebaseFirestoreTypes.Timestamp; 
 };
 export default function Todo() {
   return (

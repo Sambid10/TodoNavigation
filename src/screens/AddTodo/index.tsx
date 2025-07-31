@@ -7,17 +7,19 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { addTodo } from '../../redux/TodoSlice/TodoSlice';
+// import { addTodo } from '../../redux/TodoSlice/TodoSlice';
 import { notification } from '../../redux/NotificationSlice/NotificationSlice';
 import firestore from '@react-native-firebase/firestore';
 import { ActivityIndicator } from 'react-native';
 import { getAuth } from '@react-native-firebase/auth';
+import DatePickerComponent from './Components/DatePicker';
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
 export default function AddTodo() {
   const navigation = useNavigation<HomeScreenProp>();
   const [title, settile] = useState<string>('');
   const [desc, setdesc] = useState<string>('');
+  const [date, setDate] = useState(new Date())
   const [loading, setloading] = useState(false);
   const auth = getAuth();
   const userid= auth.currentUser!.uid 
@@ -28,9 +30,13 @@ export default function AddTodo() {
   const handleDesc = (val: string) => {
     setdesc(val);
   };
+  const handleDate =(val:Date)=>{
+    setDate(val)
+  }
   const handlePress = () => {
     setloading(true);
-    if (!title.trim() || !desc.trim()) {
+    if (!title.trim() && !desc.trim() ) {
+      setloading(false)
       return;
     } else {
       const newTodo: Todo = {
@@ -38,14 +44,15 @@ export default function AddTodo() {
         todotitle: title,
         isCompleted: false,
         id: Math.random(),
-        userid:userid
+        userid:userid,
+        datetime:firestore.Timestamp.fromDate(date)
       };
       firestore()
         .collection('todos')
         .add(newTodo)
         .then(() => {
           console.log('from db');
-          dispatch(addTodo(newTodo));
+          // dispatch(addTodo(newTodo));
           dispatch(
             notification({
               message: 'Todo Added successfully',
@@ -79,6 +86,8 @@ export default function AddTodo() {
           multiline={true}
         />
       </View>
+      
+      <DatePickerComponent disabled={false} label={"Pick your deadline date"} date={date} setDate={handleDate}/>
 
       <View style={styles.btncontainer}>
         <TouchableOpacity
@@ -110,7 +119,6 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   btncontainer: {
-    marginTop: 60,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
