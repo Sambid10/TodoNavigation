@@ -6,7 +6,7 @@
  *
  * @format
  */
-
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import RootStack from './src/navigation/Navigation';
 import { NavigationContainer } from '@react-navigation/native';
@@ -15,9 +15,10 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from './src/toastconfig/toastconfig';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // import { PermissionsAndroid } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
+import notifee, { AndroidImportance} from '@notifee/react-native';
 import {
   getAuth,
   onAuthStateChanged,
@@ -25,21 +26,49 @@ import {
 } from '@react-native-firebase/auth';
 import AuthNaviagtion from './src/navigation/AuthNaviagtion';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import {PermissionsAndroid} from 'react-native';
+import { PermissionsAndroid } from 'react-native';
 function App() {
   useEffect(() => {
-    async function getFcmToken() {
-      const token = await messaging().getToken();
-      if (token) {
-        console.log('FCM Token:', token);
-      } else {
-        console.log('Failed to get FCM token');
-      }
+    async function createNotificationChannel() {
+      await notifee.requestPermission();
+      await notifee.createChannel({
+        id: 'default',
+        name: 'Default Channel',
+        importance: AndroidImportance.HIGH,
+      });
     }
-    getFcmToken()
+    createNotificationChannel();
+   
+    const unsubscribeMessage = messaging().onMessage(async remoteMessage => {
+      console.log('asssssssssssssssssssssssssss', remoteMessage);
+      await notifee.displayNotification({
+        title: remoteMessage.notification?.title ?? 'No title',
+        body: remoteMessage.notification?.body ?? 'No body',
+        android: {
+          channelId: 'default',
+        },
+      });
+    });
+    return () => {
+      unsubscribeMessage();
+    };
   }, []);
+
+  // useEffect(() => {
+  //   async function getFcmToken() {
+  //     const token = await messaging().getToken();
+  //     if (token) {
+  //       console.log('FCM Token:', token);
+  //     } else {
+  //       console.log('Failed to get FCM token');
+  //     }
+  //   }
+  //   getFcmToken();
+  // }, []);
   useEffect(() => {
-    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    );
   }, []);
 
   useEffect(() => {
