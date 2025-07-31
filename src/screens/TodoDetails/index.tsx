@@ -9,6 +9,7 @@ import { useAppDispatch } from '../../hooks/hook';
 import { TextInput } from 'react-native';
 import { ActivityIndicator } from 'react-native';
 import DatePickerComponent from '../AddTodo/Components/DatePicker';
+import { scheduleNotification } from '../../notification/notificationTrigger';
 // import {
 //   getTodobyId,
 //   handleEdit,
@@ -36,42 +37,44 @@ export default function TodoDetails() {
   const [editedtimestamp,seteditedtimestamp]=useState(new Date())
   const [loading, setloading] = useState(false);
 
-  const OnSave = async () => {
-    setloading(true);
+const OnSave = async () => {
+  setloading(true);
+  try {
     const collection = firestore().collection('todos');
     const snapshot = await collection.where('id', '==', todoid).get();
-    if (!snapshot.empty) {
-      const docId = snapshot.docs[0].id;
-      await collection
-        .doc(docId)
-        .update({
-          todotitle: editedtitle,
-          tododesc: editeddesc,
-          datetime: firestore.Timestamp.fromDate(editedtimestamp)
-        })
-        .then(() => {
-          // dispatch(
-          //   handleEdit({
-          //     id: todoid,
-          //     title: editedtitle,
-          //     description: editeddesc,
-          //   }),
-          // );
-          dispatch(
-            notification({
-              message: 'Edited successfully',
-              messagetitle: 'Success!!',
-              type: 'customsuccess',
-            }),
-          );
-          navigation.navigate('Home', { screen: 'TabHome' });
-        })
-        .catch(err => console.log(err))
-        .finally(() => setloading(false));
-    } else {
-      console.warn('notfound');
+    if (snapshot.empty) {
+      dispatch(
+        notification({
+          message: 'Todo not found',
+          messagetitle: 'Error!',
+          type: 'customerror',
+        }),
+      );
+      return;
     }
-  };
+    const docId = snapshot.docs[0].id;
+    await collection.doc(docId).update({
+      todotitle: editedtitle,
+      tododesc: editeddesc,
+      datetime: firestore.Timestamp.fromDate(editedtimestamp),
+    });
+    await scheduleNotification(editedtitle, editedtimestamp);
+    dispatch(
+      notification({
+        message: 'Todo edited and rescheduled!',
+        messagetitle: 'Success!!',
+        type: 'customsuccess',
+      }),
+    );
+
+    navigation.navigate('Home', { screen: 'TabHome' });
+  } catch (err) {
+    console.error('Error saving todo:', err);
+  } finally {
+    setloading(false);
+  }
+};
+
 
   const onComplete = async (isChecked: boolean) => {
     const collection = firestore().collection('todos');
