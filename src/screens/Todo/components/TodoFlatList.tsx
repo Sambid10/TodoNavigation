@@ -9,6 +9,7 @@ import { RootStackParamList } from '../../../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Todo } from '..';
+import notifee from '@notifee/react-native';
 import { notification } from '../../../redux/NotificationSlice/NotificationSlice';
 import firestore from '@react-native-firebase/firestore';
 export default function TodoListFlatList({
@@ -24,27 +25,39 @@ export default function TodoListFlatList({
   >;
   const navigation = useNavigation<TodoDetailsProp>();
   const disptach = useAppDispatch();
-  const handleTodoDelete = async (id: number) => {
+  const handleTodoDelete = async (id: string) => {
     const collection = firestore().collection('todos');
-    const ids = (
-      await collection.where('id', '==', id).where('userid', '==', userid).get()
-    ).docs.map(doc => doc.id);
-    await collection
-      .doc(ids[0])
-      .delete()
-      .then(() => {
-        // disptach(handleDelete(id));
-        disptach(
-          notification({
-            message: 'Deleted Successfully',
-            type: 'customsuccess',
-            messagetitle: 'Success!!',
-          }),
-        );
-      });
-      navigation.replace("Home")
-  };
+    const snapshot = await collection
+      .where('id', '==', id)
+      .where('userid', '==', userid)
+      .get();
 
+    if (snapshot.empty) {
+      disptach(
+        notification({
+          message: 'Todo not found!',
+          type: 'customerror',
+          messagetitle: 'Error',
+        }),
+      );
+      return;
+    }
+    const doc = snapshot.docs[0];
+    const docId = doc.id;
+    const notificationId = doc.data().notificationid;
+    if (notificationId) {
+      await notifee.cancelTriggerNotification(notificationId);
+    }
+    await collection.doc(docId).delete();
+    disptach(
+      notification({
+        message: 'Deleted Successfully',
+        type: 'customsuccess',
+        messagetitle: 'Success!!',
+      }),
+    );
+    navigation.replace('Home', { screen: 'TabHome' });
+  };
   return (
     <>
       <KeyboardAvoidingView>
@@ -57,7 +70,10 @@ export default function TodoListFlatList({
               <View>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate('TodoDetails', { todoid: item.id ,todo:item})
+                    navigation.navigate('TodoDetails', {
+                      todoid: item.id,
+                      todo: item,
+                    })
                   }
                   style={styles.container}
                 >
@@ -136,7 +152,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 12,
   },
- 
 
   eachtodo: {
     display: 'flex',

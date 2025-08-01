@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
+import uuid from 'react-native-uuid';
 // import { addTodo } from '../../redux/TodoSlice/TodoSlice';
 import { notification } from '../../redux/NotificationSlice/NotificationSlice';
 import firestore from '@react-native-firebase/firestore';
@@ -65,14 +66,14 @@ export default function AddTodo() {
       tododesc: desc,
       todotitle: title,
       isCompleted: false,
-      id: Math.random(),
+      id: uuid.v4(),
       userid: userid,
       datetime: firestore.Timestamp.fromDate(date),
     };
 
     try {
-      await firestore().collection('todos').add(newTodo);
-      await scheduleNotification(title, date, newTodo.id, newTodo);
+      const notificationid= await scheduleNotification(title, date, newTodo.id, newTodo);
+      await firestore().collection('todos').add({...newTodo,notificationid});
 
       dispatch(
         notification({
@@ -81,7 +82,6 @@ export default function AddTodo() {
           messagetitle: 'Success!!',
         }),
       );
-
       navigation.navigate('Home', { screen: 'TabHome' });
     } catch (err) {
       console.error(err);

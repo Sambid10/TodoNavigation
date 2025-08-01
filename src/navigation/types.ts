@@ -14,7 +14,7 @@ export type AuthStackParamList={
 export type RootStackParamList = {
   Home: NavigatorScreenParams<BottomTabParamList>;
   AddTodo: undefined;
-  TodoDetails: { todoid: number,todo:Todo };
+  TodoDetails: { todoid: string,todo:Todo };
   ProfileEdit:{userinfo:FirebaseUser},
 };
 

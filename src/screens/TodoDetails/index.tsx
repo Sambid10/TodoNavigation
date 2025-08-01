@@ -10,6 +10,7 @@ import { TextInput } from 'react-native';
 import { ActivityIndicator } from 'react-native';
 import DatePickerComponent from '../AddTodo/Components/DatePicker';
 import { scheduleNotification } from '../../notification/notificationTrigger';
+import notifee from '@notifee/react-native';
 // import {
 //   getTodobyId,
 //   handleEdit,
@@ -65,8 +66,6 @@ export default function TodoDetails() {
         return;
       }
       const docId = snapshot.docs[0].id;
-      const docIdToNumber = Number(docId);
-      console.log(docIdToNumber);
       await collection.doc(docId).update({
         todotitle: editedtitle,
         tododesc: editeddesc,
@@ -93,30 +92,28 @@ export default function TodoDetails() {
       setloading(false);
     }
   };
-
   const onComplete = async (isChecked: boolean) => {
-    const collection = firestore().collection('todos');
-    const ids = (await collection.where('id', '==', todoid).get()).docs.map(
-      doc => doc.id,
-    );
-    await collection
-      .doc(ids[0])
-      .update({
-        isCompleted: isChecked,
-      })
-      .then(() => {
-        // dispatch(handleTodoComplete({ id: todoid, completed: isChecked }));
-        dispatch(
-          notification({
-            message: 'Edited successfully',
-            messagetitle: 'Success!!',
-            type: 'customsuccess',
-          }),
-        );
-        navigation.navigate('Home', { screen: 'TabHome' });
-      })
-      .catch(err => console.log(err));
-  };
+  const collection = firestore().collection('todos');
+  const snapshot = await collection.where('id', '==', todoid).get();
+  const docRef = snapshot.docs[0];
+  if (!docRef) return;
+  const notificationId = docRef.data().notificationid;
+  await collection.doc(docRef.id).update({
+    isCompleted: isChecked,
+  });
+  if (notificationId) {
+    await notifee.cancelTriggerNotification(notificationId);
+  }
+  dispatch(
+    notification({
+      message: 'Edited successfully',
+      messagetitle: 'Success!!',
+      type: 'customsuccess',
+    }),
+  );
+
+  navigation.navigate('Home', { screen: 'TabHome' });
+};
 
   const OnEdit = () => {
     setEditable(true);

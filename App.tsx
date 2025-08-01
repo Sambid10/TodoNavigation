@@ -43,7 +43,6 @@ function App() {
     createNotificationChannel();
 
     const subscribeMessage = messaging().onMessage(async remoteMessage => {
-      console.log('asssssssssssssssssssssssssss', remoteMessage);
       await notifee.displayNotification({
         title: remoteMessage.notification?.title ?? 'No title',
         body: remoteMessage.notification?.body ?? 'No body',
