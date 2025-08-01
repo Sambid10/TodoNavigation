@@ -17,7 +17,7 @@ import Toast from 'react-native-toast-message';
 import { toastConfig } from './src/toastconfig/toastconfig';
 import { useState } from 'react';
 // import { PermissionsAndroid } from 'react-native';
-import messaging from '@react-native-firebase/messaging';
+// import messaging from '@react-native-firebase/messaging';
 import notifee, { AndroidImportance ,EventType} from '@notifee/react-native';
 import {
   getAuth,
@@ -41,19 +41,18 @@ function App() {
       });
     }
     createNotificationChannel();
-
-    const subscribeMessage = messaging().onMessage(async remoteMessage => {
-      await notifee.displayNotification({
-        title: remoteMessage.notification?.title ?? 'No title',
-        body: remoteMessage.notification?.body ?? 'No body',
-        android: {
-          channelId: 'default',
-        },
-      });
-    });
-    return () => {
-      subscribeMessage();
-    };
+    // const subscribeMessage = messaging().onMessage(async remoteMessage => {
+    //   await notifee.displayNotification({
+    //     title: remoteMessage.notification?.title ?? 'No title',
+    //     body: remoteMessage.notification?.body ?? 'No body',
+    //     android: {
+    //       channelId: 'default',
+    //     },
+    //   });
+    // });
+    // return () => {
+    //   subscribeMessage();
+    // };
   }, []);
   // useEffect(() => {
   //   async function getFcmToken() {
@@ -72,7 +71,6 @@ useEffect(() => {
     if (type === EventType.PRESS) {
       const data = detail.notification?.data;
       if (!data) return;
-      const todoId = Number(data.todoId);
       let todo;
       try {
         todo = data.todo ? JSON.parse(data.todo as any) : null;
@@ -83,8 +81,8 @@ useEffect(() => {
         console.warn('Failed to parse todo from notification data', e);
         todo = null;
       }
-      if (!isNaN(todoId) && todo) {
-        navigate('TodoDetails', { todoid: todoId, todo });
+      if (todo) {
+        navigate('TodoDetails', { todoid:todo.id, todo });
       }
     }
   });
