@@ -15,6 +15,7 @@ import { getAuth } from '@react-native-firebase/auth';
 import DatePickerComponent from './Components/DatePicker';
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 import { scheduleNotification } from '../../notification/notificationTrigger';
+import { isDateTimeValid } from '../../helpers/ValidateDateTime';
 export default function AddTodo() {
   const navigation = useNavigation<HomeScreenProp>();
   const [title, settile] = useState<string>('');
@@ -35,7 +36,27 @@ export default function AddTodo() {
   };
   const handlePress = async () => {
     setloading(true);
+
     if (!title.trim() && !desc.trim()) {
+      dispatch(
+        notification({
+          message: 'Title and description cannot be empty!',
+          messagetitle: 'Validation Error!!',
+          type: 'customerror',
+        }),
+      );
+      setloading(false);
+      return;
+    }
+
+    if (isDateTimeValid(date)) {
+      dispatch(
+        notification({
+          message: 'Deadline must be at least 2 minutes in the future.',
+          messagetitle: 'Error!!',
+          type: 'customerror',
+        }),
+      );
       setloading(false);
       return;
     }
@@ -52,6 +73,7 @@ export default function AddTodo() {
     try {
       await firestore().collection('todos').add(newTodo);
       await scheduleNotification(title, date, newTodo.id, newTodo);
+
       dispatch(
         notification({
           message: 'Todo Added successfully',
@@ -59,9 +81,17 @@ export default function AddTodo() {
           messagetitle: 'Success!!',
         }),
       );
+
       navigation.navigate('Home', { screen: 'TabHome' });
     } catch (err) {
       console.error(err);
+      dispatch(
+        notification({
+          message: 'Something went wrong!',
+          type: 'error',
+          messagetitle: 'Error',
+        }),
+      );
     } finally {
       setloading(false);
     }

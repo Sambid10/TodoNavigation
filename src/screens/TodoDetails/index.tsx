@@ -22,6 +22,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { notification } from '../../redux/NotificationSlice/NotificationSlice';
 import firestore from '@react-native-firebase/firestore';
 type HomeProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+import { isDateTimeValid } from '../../helpers/ValidateDateTime';
 export default function TodoDetails() {
   const route = useRoute<TodoDetailsProp>();
   const navigation = useNavigation<HomeProp>();
@@ -34,49 +35,64 @@ export default function TodoDetails() {
   const [editable, setEditable] = useState(false);
   const [editedtitle, setEditedtitle] = useState('');
   const [editeddesc, setEditeddesc] = useState('');
-  const [editedtimestamp,seteditedtimestamp]=useState(new Date())
+  const [editedtimestamp, seteditedtimestamp] = useState(new Date());
   const [loading, setloading] = useState(false);
 
-const OnSave = async () => {
-  setloading(true);
-  try {
-    const collection = firestore().collection('todos');
-    const snapshot = await collection.where('id', '==', todoid).get();
-    if (snapshot.empty) {
+  const OnSave = async () => {
+    setloading(true);
+    if (isDateTimeValid(editedtimestamp)) {
       dispatch(
         notification({
-          message: 'Todo not found',
-          messagetitle: 'Error!',
+          message: 'Deadline must be at least 2 minutes in the future.',
+          messagetitle: 'Error!!',
           type: 'customerror',
         }),
       );
+      setloading(false);
       return;
     }
-    const docId = snapshot.docs[0].id;
-    const docIdToNumber=Number(docId) 
-    console.log(docIdToNumber)
-    await collection.doc(docId).update({
-      todotitle: editedtitle,
-      tododesc: editeddesc,
-      datetime: firestore.Timestamp.fromDate(editedtimestamp),
-    });
-    await scheduleNotification(editedtitle, editedtimestamp,route.params.todoid,route.params.todo);
-    dispatch(
-      notification({
-        message: 'Todo edited and rescheduled!',
-        messagetitle: 'Success!!',
-        type: 'customsuccess',
-      }),
-    );
+    try {
+      const collection = firestore().collection('todos');
+      const snapshot = await collection.where('id', '==', todoid).get();
+      if (snapshot.empty) {
+        dispatch(
+          notification({
+            message: 'Todo not found',
+            messagetitle: 'Error!',
+            type: 'customerror',
+          }),
+        );
+        return;
+      }
+      const docId = snapshot.docs[0].id;
+      const docIdToNumber = Number(docId);
+      console.log(docIdToNumber);
+      await collection.doc(docId).update({
+        todotitle: editedtitle,
+        tododesc: editeddesc,
+        datetime: firestore.Timestamp.fromDate(editedtimestamp),
+      });
+      await scheduleNotification(
+        editedtitle,
+        editedtimestamp,
+        route.params.todoid,
+        route.params.todo,
+      );
+      dispatch(
+        notification({
+          message: 'Todo edited and rescheduled!',
+          messagetitle: 'Success!!',
+          type: 'customsuccess',
+        }),
+      );
 
-    navigation.navigate('Home', { screen: 'TabHome' });
-  } catch (err) {
-    console.error('Error saving todo:', err);
-  } finally {
-    setloading(false);
-  }
-};
-
+      navigation.navigate('Home', { screen: 'TabHome' });
+    } catch (err) {
+      console.error('Error saving todo:', err);
+    } finally {
+      setloading(false);
+    }
+  };
 
   const onComplete = async (isChecked: boolean) => {
     const collection = firestore().collection('todos');
@@ -106,7 +122,7 @@ const OnSave = async () => {
     setEditable(true);
     setEditedtitle(route.params.todo.todotitle);
     setEditeddesc(route.params.todo.tododesc);
-    seteditedtimestamp(route.params.todo.datetime.toDate())
+    seteditedtimestamp(route.params.todo.datetime.toDate());
   };
   return (
     <View style={styles.maincontainer}>
@@ -148,7 +164,9 @@ const OnSave = async () => {
         <View style={styles.eachformfield}>
           <DatePickerComponent
             disabled={!editable}
-            date={editable ? editedtimestamp : route.params.todo.datetime!.toDate()}
+            date={
+              editable ? editedtimestamp : route.params.todo.datetime!.toDate()
+            }
             label={'Todo Deadline date'}
             setDate={seteditedtimestamp}
           />

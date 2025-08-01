@@ -7,7 +7,8 @@ export async function scheduleNotification(
   todoId: number,
   todo: Todo,
 ) {
-  const oneMinuteBefore = new Date(datetime.getTime() - 1 * 60 * 1000);
+  const oneMinuteBefore = new Date(datetime.getTime() - 2 * 60 * 1000);
+  
   const trigger: TimestampTrigger = {
     type: TriggerType.TIMESTAMP,
     timestamp: oneMinuteBefore.getTime(),
@@ -16,7 +17,7 @@ export async function scheduleNotification(
   await notifee.createTriggerNotification(
     {
       title: '⏰ Todo Reminder!!',
-      body: `"${title}" is due in 1 minute.`,
+      body: `"${title}" is due in 2 minute.`,
       android: {
         channelId: 'default',
         pressAction: {
